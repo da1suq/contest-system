@@ -1,0 +1,100 @@
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 980px;
+}
+
+.carousel__track {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* если ячеек меньше, чем мест — они просто по центру */
+  min-width: 0;
+  --gap: 24px;
+}
+
+/* ячейка: при «Подробнее» остальные плавно схлопываются, выбранная растягивается */
+/* ширина ячейки фиксирована (1/N ширины ряда) и не зависит от количества найденных контестов */
+.carousel__slot {
+  flex: 0 0 calc((100% - (var(--visible) - 1) * var(--gap)) / var(--visible));
+  min-width: 0;
+  /* запас сверху/снизу, чтобы не обрезался «подъём» карточки при наведении */
+  padding-top: 6px;
+  margin-top: -6px;
+  overflow: hidden;
+  transition: flex-grow 0.55s cubic-bezier(0.65, 0, 0.35, 1), flex-basis 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    margin-left 0.55s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.35s ease, visibility 0s;
+}
+
+.carousel__slot + .carousel__slot {
+  margin-left: var(--gap);
+}
+
+/* «Подробнее»: выбранная ячейка растягивается на весь ряд, остальные схлопываются */
+.carousel__track--open .carousel__slot {
+  flex: 1 1 0;
+  margin-left: 0;
+}
+
+.carousel__slot--hidden,
+.carousel__track--open .carousel__slot--hidden {
+  flex: 0 0 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* visibility скрываем только когда ячейка уже схлопнулась */
+  transition: flex-grow 0.55s cubic-bezier(0.65, 0, 0.35, 1), flex-basis 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    margin-left 0.55s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.35s ease, visibility 0s 0.55s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__slot,
+  .carousel__slot--hidden {
+    transition: none;
+  }
+}
+
+.carousel__arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.carousel__arrow:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.carousel__arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .carousel {
+    gap: 4px;
+  }
+  .carousel__arrow {
+    width: 32px;
+  }
+}
+
+.carousel__add {
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: transform 0.15s;
+}
+
+.carousel__add:hover {
+  transform: scale(1.1);
+}

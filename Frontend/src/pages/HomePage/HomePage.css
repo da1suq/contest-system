@@ -1,0 +1,117 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 24px 0;
+}
+
+.home__title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.home__subtitle {
+  margin: 4px 0 22px;
+  font-size: 22px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.home__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 36px;
+}
+
+.home__intro {
+  width: 100%;
+}
+
+.home__intro > .collapse__inner {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home__pane > .collapse__inner {
+  display: flex;
+  justify-content: center;
+}
+
+/* смена заголовка */
+.home__title--swap {
+  animation: home-title-in 0.5s ease 0.35s backwards;
+}
+
+@keyframes home-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* ---------- плавное схлопывание / раскрытие ---------- */
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  /* уходит: сначала растворяется, затем схлопывается */
+  transition: opacity 0.35s ease, grid-template-rows 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.3s,
+    visibility 0s 0.8s;
+}
+
+.collapse__inner {
+  min-height: 0;
+  overflow: hidden;
+  /* запас по бокам, чтобы не обрезались тени фокуса и hover-масштаб */
+  margin: 0 -8px;
+  padding: 0 8px;
+}
+
+.collapse--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  /* появляется: ждёт, пока предыдущий блок уйдёт */
+  transition: grid-template-rows 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.3s, opacity 0.4s ease 0.6s,
+    visibility 0s 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapse,
+  .collapse--open,
+  .home__title--swap {
+    transition: none;
+    animation: none;
+  }
+}
+
+.home__state {
+  margin: 48px 0;
+  color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+  .home__title {
+    font-size: 26px;
+  }
+  .home__subtitle {
+    font-size: 16px;
+  }
+}

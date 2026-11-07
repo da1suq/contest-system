@@ -1,0 +1,319 @@
+.create {
+  color-scheme: dark;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 28px;
+  width: 100%;
+  max-width: 980px;
+  padding: 20px 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+
+.create__side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create__field,
+.create__area {
+  font: inherit;
+  color: #fff;
+}
+
+.create__field {
+  width: 100%;
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  font-size: 12px;
+  outline: 0;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.create__field::placeholder {
+  color: #fff;
+}
+
+.create__field:focus,
+.create__area:focus {
+  box-shadow: 0 0 0 3px rgba(183, 156, 255, 0.5);
+}
+
+.create__field[aria-invalid='true'],
+.create__area[aria-invalid='true'] {
+  border-color: #ff6b81;
+}
+
+/* select с кастомной стрелкой */
+.create__select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1.5 5 5 5-5' fill='none' stroke='%23fff' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+}
+
+.create__select option {
+  background: #1c1b1e;
+  color: #fff;
+}
+
+/* время: с [18:00] до [21:00] */
+.create__time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px 0 16px;
+}
+
+.create__time-label {
+  font-size: 12px;
+}
+
+.create__time-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  color: #fff;
+  color-scheme: dark;
+  outline: 0;
+}
+
+.create__time-input:focus-visible {
+  outline: 0;
+}
+
+.create__time:focus-within {
+  box-shadow: 0 0 0 3px rgba(183, 156, 255, 0.5);
+}
+
+.create__time[aria-invalid='true'] {
+  border-color: #ff6b81;
+}
+
+/* кружки задач: 1 2 3 … + */
+.create__tasks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.create__task {
+  position: relative;
+  display: inline-flex;
+  animation: task-in 0.25s ease backwards;
+}
+
+@keyframes task-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.create__circle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.create__circle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* выбранная задача — кольцо вокруг кружка */
+.create__circle--active {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(183, 156, 255, 0.85);
+}
+
+/* задача не заполнена (после попытки создать) */
+.create__circle[aria-invalid='true'] {
+  border-color: #ff6b81;
+  color: #ff9aa8;
+}
+
+.create__circle--add {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.create__circle--add:active {
+  transform: scale(0.92);
+}
+
+/* маленький минус в углу кружка — виден при наведении */
+.create__minus {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ff6b81;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.create__task:hover .create__minus,
+.create__minus:focus-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.create__minus:hover {
+  background: #ff3d5a;
+}
+
+/* на сенсорных экранах наведения нет — минус показываем всегда */
+@media (hover: none) {
+  .create__minus {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.create__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.create__error {
+  margin: 0;
+  min-height: 28px;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+  color: #ff9aa8;
+}
+
+.create__submit {
+  width: 100%;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, #5a16e8 0%, #2a0f6e 100%);
+  font-size: 12px;
+  font-weight: 500;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.create__submit:hover {
+  filter: brightness(1.25);
+}
+
+.create__submit:active {
+  transform: scale(0.97);
+}
+
+.create__cancel {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 11px;
+  text-decoration: underline;
+}
+
+.create__cancel:hover {
+  color: var(--text-muted);
+}
+
+.create__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.create__label-sub {
+  margin-left: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.create__label {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.create__label:not(:first-child) {
+  margin-top: 20px;
+}
+
+.create__area {
+  width: 100%;
+  height: 130px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  font-size: 13px;
+  line-height: 1.4;
+  resize: vertical;
+  outline: 0;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .create__task {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .create {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  /* на узких экранах кнопка уходит под текстовые поля */
+  .create__side {
+    display: contents;
+  }
+  .create__side > .create__field,
+  .create__tasks {
+    order: 0;
+  }
+  .create__main {
+    order: 1;
+  }
+  .create__actions {
+    order: 2;
+  }
+}
