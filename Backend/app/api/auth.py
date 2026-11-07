@@ -4,10 +4,10 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 
 # Секретный ключ для подписи токенов (на хакатоне храним тут, в реальной жизни - в .env файле)
-SECRET_KEY = "super-secret-hackathon-key"
+SECRET_KEY = "super_secret_hackathon_key_must_be_at_least_32_bytes_long_12345"
 ALGORITHM = "HS256"
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
@@ -81,23 +81,23 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 # Эта штука автоматически будет искать токен в заголовках запроса
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
-        status_code=401,
-        detail="Не удалось проверить токен",
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        # Пытаемся расшифровать токен нашим секретным ключом
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
+        user_id = payload.get("sub")
         if user_id is None:
             raise credentials_exception
-    except InvalidTokenError:
-        raise credentials_exception
+            
+        # ИСПРАВЛЕНИЕ ЗДЕСЬ: Оборачиваем user_id в int()
+        user = db.query(User).filter(User.id == int(user_id)).first()
         
-    # Ищем юзера в базе по ID из токена
-    user = db.query(User).filter(User.id == user_id).first()
-    if user is None:
+        if user is None:
+            raise credentials_exception
+        return user
+    except Exception:
         raise credentials_exception
-    return user
