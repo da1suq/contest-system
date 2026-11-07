@@ -15,7 +15,7 @@ from app.sandbox import execute_code
 
 router = APIRouter(tags=["Проверка решений"])
 
-# Схема четко по контракту с фронтом (заменили problem_id на match_id и task_id)
+# Схема четко по контракту с фронтом 
 class SubmitRequest(BaseModel):
     match_id: int
     task_id: int
@@ -100,11 +100,8 @@ def submit_code(
     if match.status != "active":
         raise HTTPException(status_code=400, detail="Матч еще не начался или уже завершен")
 
-    # 2. Жесткая привязка ко времени (по требованиям фронтов)
+    # 2. Жесткая привязка ко времени 
     now = datetime.now(timezone.utc)
-    # Раскомментируй это, когда в БД появятся контесты с реальным end_at
-    # if match.end_at and now > match.end_at.replace(tzinfo=timezone.utc):
-    #     raise HTTPException(status_code=400, detail="Время вышло, решения больше не принимаются")
 
     # 3. Проверяем наличие задачи в текущем контесте
     task = db.query(Task).filter(Task.id == payload.task_id, Task.contest_id == match.contest_id).first()

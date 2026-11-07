@@ -60,7 +60,6 @@ def create_task(
     db.refresh(new_task)
     return new_task
 
-# Тот самый скрипт для быстрой генерации данных для фронтов
 @router.post("/seed")
 def seed_test_data(db: Session = Depends(get_db)):
     if db.query(Contest).first():

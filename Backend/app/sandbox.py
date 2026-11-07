@@ -71,7 +71,6 @@ print(json.dumps(result))
 
 def make_result(verdict, execution_time=0.0, memory_mb=0.0, tests_passed=0,
                 failed_test=None, message=""):
-    # единый формат ответа для бэкенда
     return {
         "verdict": verdict,
         "execution_time": execution_time,
@@ -136,7 +135,6 @@ def run_one_test(container, lang, test_number, time_limit):
     try:
         return json.loads(output.decode("utf-8", errors="replace"))
     except json.JSONDecodeError:
-        # раннер убит вместе с решением — обычно лимит памяти/процессов
         return {"status": "crash", "time": 0.0, "memory_kb": 0,
                 "exit_code": exit_code, "stdout": "", "stderr": ""}
 
